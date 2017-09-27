@@ -1,21 +1,12 @@
-/*---------------------------------------------------------------
-//    ______  __          ___      .___  ___.  _______ 
-//   /      ||  |        /   \     |   \/   | |   ____|
-//  |  ,----'|  |       /  ^  \    |  \  /  | |  |__   
-//  |  |     |  |      /  /_\  \   |  |\/|  | |   __|  
-//  |  `----.|  `----./  _____  \  |  |  |  | |  |____ 
-//   \______||_______/__/     \__\ |__|  |__| |_______|
-//                                                     
-/*---------------------------------------------------------------
- *
- *   CLAME:"Clasificador MetagenÃ³mico"
- *	
- *   CLAME is a binning software for metagenomic reads.
- *   It immplements a fm-index search algorithm for nucleotide 
- *   sequence alignment. Then it uses strongly connected component strategy
- *   to bin sequences with similar DNA composition.
- *  
- ---------------------------------------------------------------*/
+---------------------------------------------------------------
+    CLAME:"Clasificador MetagenÃ³mico"
+---------------------------------------------------------------
+Description:
+    CLAME is a binning software for metagenomic reads.
+    It immplements a fm-index search algorithm for nucleotide 
+    sequence alignment. Then it uses strongly connected component strategy
+    to bin sequences with similar DNA composition.
+---------------------------------------------------------------
 
 ---------------------------------------------------------------
 Installation
