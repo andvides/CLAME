@@ -1,12 +1,11 @@
 ---------------------------------------------------------------
-    CLAME:"Clasificador MetagenÃ³mico"
+    CLAME:"Clasificador Metagenomico"
 ---------------------------------------------------------------
 Description:
     CLAME is a binning software for metagenomic reads.
     It immplements a fm-index search algorithm for nucleotide 
     sequence alignment. Then it uses strongly connected component strategy
     to bin sequences with similar DNA composition.
----------------------------------------------------------------
 
 ---------------------------------------------------------------
 Installation
