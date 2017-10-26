@@ -13,9 +13,11 @@ Installation
 1. To download and install the SDSL - Succinct Data Structure Library, use the instructions describe in the wep page.
 https://github.com/simongog/sdsl-lite.
 
-2. To compile CLAME, type make
+2. Download CLAME source codes into the same directory used for the SDSL codes
 
-3. Type clame -h to show the help
+3. To compile CLAME, type make
+
+4. Type clame -h to show the help
 
 ---------------------------------------------------------------
 CLAME Versions
@@ -41,3 +43,4 @@ Benavides A(1), Alzate JF (2),(3) and Cabarcas F (1),(3)
 1.	Grupo Sistemic, Departamento de Ingeniería Electrónica, Facultad de Ingenieria, Universidad de Antioquia.
 2.	Centro Nacional de Secuenciacion Genomica-CNSG, Sede de Investigación Universitaria SIU, Universidad de Antioquia
 3.	Grupo de Parasitología, Departamento de Microbiología y Parasitología, Facultad de Medicina, Universidad de Antioquia
+
