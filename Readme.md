@@ -30,9 +30,9 @@ Usage
 ./clame -b 70 -multiFasta test/Bancomini.fna -nt 4 -output bminiBins 
 
 Output files
-bminiBins_*.fastq: Output fastq
-bminiBins.bins: All bins reported
-bmini.fm9: FM-index output
+1. bminiBins_*.fastq: Output fastq
+2. bminiBins.bins: All bins reported
+3. bmini.fm9: FM-index output
 
 ---------------------------------------------------------------
 Authors
