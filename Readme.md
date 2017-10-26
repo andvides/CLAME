@@ -27,11 +27,8 @@ CLAME Versions
 ---------------------------------------------------------------
 Usage
 ---------------------------------------------------------------
-Type
 ./clame -b 70 -multiFasta test/Bancomini.fna -nt 4 -output bminiBins 
----------------------------------------------------------------
-outputs
----------------------------------------------------------------
+
 Output files
 bminiBins_*.fastq: Output fastq
 bminiBins.bins: All bins reported
