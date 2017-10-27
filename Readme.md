@@ -22,22 +22,6 @@ git clone https://github.com/andvides/CLAME.git
 
 5. Type ./clame -h to show the help
 
-CLAME:'Clasificador Metagenomico'
-Bin name and reads into of this bin
-
-./clame
-  -h            (Help)
-  -b            minimum number of bases to take an alignment (default 20) 
-  -fm9          Load fm9 file  
-  -fastq        input file is in a fastq format  
-  -ld           minimun number of links (default 0) 
-  -lu           maximun number of links (default 10000) 
-  -multiFasta	FILE  with all the reads 
-  -nt           number of threads to use (default 1) 
-  -output       name for the output-file  if print option was selected (default output)
-  -print        enable print output to file (default false) 
-  -sizeBin      minimum number of reads to report a bin (default 1000) 
-
 ---------------------------------------------------------------
 CLAME Versions
 ---------------------------------------------------------------
