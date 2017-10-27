@@ -11,31 +11,52 @@ Description:
 Installation
 ---------------------------------------------------------------
 1. To download and install the SDSL - Succinct Data Structure Library, use the instructions describe in the wep page.
-https://github.com/simongog/sdsl-lite.
+https://github.com/simongog/sdsl-lite
 
-2. Download CLAME source codes into the same directory used for the SDSL codes
+2. To download CLAME source codes
+git clone https://github.com/andvides/CLAME.git
 
-3. To compile CLAME, type make
+3. cd CLAME/
 
-4. Type clame -h to show the help
+4. make
+
+5. Type ./clame -h to show the help
+
+CLAME:'Clasificador Metagenomico'
+Bin name and reads into of this bin
+
+./clame
+  -h            (Help)
+  -b            minimum number of bases to take an alignment (default 20) 
+  -fm9          Load fm9 file  
+  -fastq        input file is in a fastq format  
+  -ld           minimun number of links (default 0) 
+  -lu           maximun number of links (default 10000) 
+  -multiFasta	FILE  with all the reads 
+  -nt           number of threads to use (default 1) 
+  -output       name for the output-file  if print option was selected (default output)
+  -print        enable print output to file (default false) 
+  -sizeBin      minimum number of reads to report a bin (default 1000) 
 
 ---------------------------------------------------------------
 CLAME Versions
 ---------------------------------------------------------------
 1. Type make or make all: To Compile CLAME.
-
-2. Type make or make full: To compile a debug version of CLAME.
+2. Type make debug: To compile a debug version of CLAME.
 
 ---------------------------------------------------------------
 Usage
 ---------------------------------------------------------------
-./clame -b 70 -multiFasta test/Bancomini.fna -nt 4 -output bminiBins 
+./clame -b 70 -multiFasta test/Bancomini.fna -nt 4 -output bminiBins -print
 
 Output files
-1. bminiBins_*.fastq: Output fastq
-2. bminiBins.bins: All bins reported
-3. bmini.fm9: FM-index output
-
+1. bminiBins_*.fasta    Output fasta file for all the bins reported
+2. bminiBins.bins       All bins reported 
+3. bmini.fm9            FM-index output
+4. bmini.index          First colum contains the origal name for each read, the second column the index used by CLAME
+5. bminiBins.links      Histogram links by number of reads
+6. bminiBins.result     Adjacency list for the overlap detected by each read
+     
 ---------------------------------------------------------------
 Authors
 ---------------------------------------------------------------
@@ -43,4 +64,3 @@ Benavides A(1), Alzate JF (2),(3) and Cabarcas F (1),(3)
 1.	Grupo Sistemic, Departamento de Ingeniería Electrónica, Facultad de Ingenieria, Universidad de Antioquia.
 2.	Centro Nacional de Secuenciacion Genomica-CNSG, Sede de Investigación Universitaria SIU, Universidad de Antioquia
 3.	Grupo de Parasitología, Departamento de Microbiología y Parasitología, Facultad de Medicina, Universidad de Antioquia
-
