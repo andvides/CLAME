@@ -172,7 +172,7 @@ bool readArguments(int argc,char *argv[], Args *args,Names *names, Parameters *p
         return true;
 }
 
-bool readFasta(Names *names, vector<string> *bases,string *fasta,vector<uint32_t> *index)
+bool readFasta(Names *names, vector<string> *bases,string *fasta,vector<uint32_t> *index, vector<string> *title)
 {
     
     //to print index
@@ -202,7 +202,7 @@ bool readFasta(Names *names, vector<string> *bases,string *fasta,vector<uint32_t
                 else
                 {
                     myfile<<name<<"\t"<<indexTitle++<<endl; 
-                    //title->push_back (name);
+                    title->push_back (name);
                     bases->push_back(read);
                     read+='$';
                     n = read.length();
@@ -211,13 +211,14 @@ bool readFasta(Names *names, vector<string> *bases,string *fasta,vector<uint32_t
                     index->push_back(indexBases);
                     read="";
                 }
-                name=word;
+                int found = word.find(' ');
+                name=word.substr (0,found);
             }
             else
                 read=read+word;
         }
         myfile<<name<<"\t"<<indexTitle++<<endl; 
-        //title->push_back (name);
+        title->push_back (name);
         bases->push_back(read);
         read+='$';
         n = read.length();
@@ -239,7 +240,7 @@ bool readFasta(Names *names, vector<string> *bases,string *fasta,vector<uint32_t
     }
 }
 
-bool readFastQFile(Names *names,  vector<string>* bases, string* fasta, vector<uint32_t> *index)
+bool readFastQFile(Names *names,  vector<string>* bases, string* fasta, vector<uint32_t> *index, vector<string> *title,  vector<string> *qual)
 {
     //to print the index mandatory file
     ofstream myfile;
@@ -258,7 +259,7 @@ bool readFastQFile(Names *names,  vector<string>* bases, string* fasta, vector<u
 
     if (infile.is_open()) 
     {
-        string word, name="", read="";
+        string word, name="", read="", quality="";
         bool firstTime=true;
         int countLine=0;
         index->push_back(indexBases);
@@ -268,7 +269,8 @@ bool readFastQFile(Names *names,  vector<string>* bases, string* fasta, vector<u
             {
                 case s0:
                     if (word[0]=='@') 
-                        name=word, countLine=0, state=s1, myfile<<name<<"\t"<<indexTitle++<<endl; //print Read0 0...;
+                        int found = name.find(' '), name=word.substr (0,found),
+                        countLine=0, state=s1, myfile<<name<<"\t"<<indexTitle++<<endl; //print Read0 0...;
                     break;
                 case s1:
                     if (word[0]=='+') 
@@ -277,8 +279,10 @@ bool readFastQFile(Names *names,  vector<string>* bases, string* fasta, vector<u
                         read=read+word, countLine++;
                     break;
                 case s2:
+                    quality=quality+word;
                     if(--countLine==0)
                     {
+                        qual->push_back(quality);
                         bases->push_back(read);
                         read+='$';
                         n = read.length();
@@ -286,6 +290,7 @@ bool readFastQFile(Names *names,  vector<string>* bases, string* fasta, vector<u
                         index->push_back(indexBases);
                         *fasta+=read;
                         read="";
+                        quality="";
                         state=s0;
                     }
                     break;
@@ -432,7 +437,7 @@ void printResult(Names *names, int numberOFreads, vector<int> *MatrixList)
     myfile2.close();
 }
 
-void binningPrint(Names *names, Parameters *parameters, vector<string> *title, int *queryList, vector<int> *MatrixList, int numberOFreads, vector<string> *bases)
+void binningPrint(Names *names, Parameters *parameters, vector<string> *title, int *queryList, vector<int> *MatrixList, int numberOFreads, vector<string> *bases,vector<string> *qual)
 {
     int cpus=parameters->numThreads;
     std::vector<string>::iterator ptrBases= bases->begin();
@@ -498,8 +503,11 @@ void binningPrint(Names *names, Parameters *parameters, vector<string> *title, i
                     myfile<<*get<<"\t"<<numBin<<endl;
                     
                     string base=*(ptrBases+*(get));
-                    myfile2<<">Read_"<<*get<<endl;
+                    myfile2<<title[*(get)]<<endl;
                     myfile2<<base<<endl;
+                    if(parameters.fastq)
+                        myfile2<<'+'<<endl, myfile2<<qual[*(get)]<<endl;
+
                 }
                 numBin++;
                 myfile2.close();
@@ -589,4 +597,5 @@ void printerror(const char arg[])
     cout << ""<< endl;
 
 }
+
 
