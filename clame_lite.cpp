@@ -26,7 +26,6 @@
  ---------------------------------------------------------------*/
 
 #include "clame_lite.h"
-#include "chi2test.h"
 
 bool readArguments(int argc,char *argv[], Args *args,Names *names, Parameters *parameters)
 {
@@ -384,7 +383,7 @@ bool alignemnt(Names *names,Parameters *parameters,vector<string> *bases,string 
                             #pragma omp critical
                             {
                                 MatrixList[i].push_back(subjectID);
-                                //MatrixList[subjectID].push_back(i);
+                                MatrixList[subjectID].push_back(i);
                             }
                         }
                     }
@@ -452,11 +451,7 @@ void binningPrint(Names *names, Parameters *parameters, vector<string> *title, i
     ofstream myfile;
     string nameFile=names->outputFile+".binning";
     myfile.open(nameFile.c_str());
-    //stat
-    ofstream myfile3;
-    string nameFile3=names->outputFile+".stat";
-    myfile3.open(nameFile3.c_str());
-    myfile3<<"Bin: numBin\tsize\tmean\tstdv1\tmean1/3\tcv1\tdof\tprob\ttest"<<endl;
+    
                 
     int *stack = new int[numberOFreads] ();
     int *put=stack;
@@ -503,47 +498,11 @@ void binningPrint(Names *names, Parameters *parameters, vector<string> *title, i
                     myfile<<*get<<"\t"<<numBin<<endl;
                     
                     string base=*(ptrBases+*(get));
-                    myfile2<<">Read\t"<<*get<<endl;
+                    myfile2<<">Read_"<<*get<<endl;
                     myfile2<<base<<endl;
-                    
-                    //statidistic
-                    int total=MatrixList[*get].size();
-                    localLinks[p++]=total;
-                    links1+=total;
                 }
                 numBin++;
                 myfile2.close();
-                
-                //statidistic
-                mean1=links1/size;
-                for( int p=0;p<size;p++)
-                    std1+=pow(localLinks[p] - mean1, 2);
-                float stdv1=sqrt(std1 / size);
-                float cv1=100*stdv1/mean1;
-                
-                //chi2 test
-                double results[3]={0.0,0.0,0.0};
-                int min=*std::min_element(localLinks,localLinks+size);
-                int max=*std::max_element(localLinks,localLinks+size);
-                std::cout << "The smallest element is " << *std::min_element(localLinks,localLinks+size) << '\t'<<min<<endl;
-                std::cout << "The largest element is "  << *std::max_element(localLinks,localLinks+size) << '\t'<<max<<endl;
-                int numbins=100;
-                if ((max-min) > 1)
-                {
-                    double x[max-min];
-                    int j=0;
-                    if ((max-min) >= numbins)
-                        for (int i=min; i<max; i+=(max-min)/numbins)
-                            x[j++] = i;
-                    else
-                        for (int i=min; i<max; i++)
-                            x[j++] = i;
-                        
-                    chi2test(&x[0], size, 0.05,&results[0]);
-
-                }
-                myfile3<<">Bin:"<<numBin-1<<":\t"<<size<<"\t"<<mean1<<"\t"<<stdv1<<"\t"<<mean1/3<<"\t"<<cv1<<"\t"<<results[0]<<"\t"<<results[1]<<"\t"<<results[2]<<endl;
-                
 
             }
             put=stack; //pointers restart
@@ -552,7 +511,6 @@ void binningPrint(Names *names, Parameters *parameters, vector<string> *title, i
 		}
 	}
     myfile.close();
-    myfile3.close();
 }
 
 uint32_t indx2Loc(uint32_t locs, vector<uint32_t> *index)
