@@ -53,18 +53,18 @@ using namespace std;
 
 struct Args {bool multiFasta; bool fastq; bool outputFile; bool numT; bool bases_Threshold; bool print; bool fm9; bool lu; bool ld; bool sizeBin;};
 struct Names {string multiFasta; string outputFile; string fm9;};
-struct Parameters {int ld; int lu; int numThreads; int query_size; bool enablePrint; bool loadFM9;int sizeBin;};
+struct Parameters {int ld; int lu; int numThreads; int query_size; bool enablePrint; bool loadFM9;int sizeBin;bool fastq;};
 
 string reverse(string str);
 int mstrlen(const char arg[]);
 void printerror(const char arg[]);
 bool IsParam(char arg[],const char comp[]);
 bool readArguments(int argc,char *argv[], Args *args,Names *names, Parameters *parameters);
-bool readFasta(Names *names,vector<string> *bases,string *fasta,vector<uint32_t> *index);
-bool readFastQFile(Names *names,vector<string>* bases, string* fasta, vector<uint32_t> *index);
+bool readFasta(Names *names,vector<string> *bases,string *fasta,vector<uint32_t> *index, vector<string> *title);
+bool readFastQFile(Names *names,vector<string>* bases, string* fasta, vector<uint32_t> *index, vector<string> *title, vector<string> *qual);
 bool alignemnt(Names *names,Parameters *parameters,vector<string> *bases,string *fasta, vector<uint32_t> *index, int* queryList, vector<int>* MatrixList);
 void printResult(Names *names, int numberOFreads, vector<int> *MatrixList);
 
 uint32_t indx2Loc(uint32_t locs, vector<uint32_t> *index);
 void binning(Names *names, Parameters *parameters, vector<string> *title, int *queryList, vector<int> *MatrixList, int numberOFreads);
-void binningPrint(Names *names, Parameters *parameters, vector<string> *title, int *queryList, vector<int> *MatrixList, int numberOFreads, vector<string> *bases);
+void binningPrint(Names *names, Parameters *parameters, vector<string> *title, int *queryList, vector<int> *MatrixList, int numberOFreads, vector<string> *bases,vector<string> *qual);
