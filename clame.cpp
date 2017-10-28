@@ -39,9 +39,10 @@ int main(int argc,char *argv[])
     //struct Args {bool multiFasta; bool fastq, bool outputFile; bool numT; bool bases_Threshold; bool print; bool fm9; bool lu; bool ld; bool sizeBin;};
     Args   args = {false,false,false,false,false,false,false,false,false,false};
     Names  names;
-    //struct Parameters {int ld; int lu; int numThreads; int query_size; bool enablePrint; bool loadFM9;int sizeBin;};
-    Parameters parameters={0,10000,1,20,false,false,1000};
+    //struct Parameters {int ld; int lu; int numThreads; int query_size; bool enablePrint; bool loadFM9;int sizeBin; bool fastq;};
+    Parameters parameters={0,10000,1,20,false,false,1000,false};
     names.outputFile="output";
+    parameters.fastq=args.fastq;
 
     bool initOK=readArguments(argc,argv,&args,&names,&parameters);
     if (initOK)
@@ -51,14 +52,15 @@ int main(int argc,char *argv[])
         
         vector<string> title;         //Array to hold the name of the reads
         vector<string> bases;         //Array to hold the bases of the reads
+        vector<string> qual;          //Array to hold the bases of the reads' quality
         vector<uint32_t> index;       //Array to hold the bases->index assencion
         string fasta="";              //String to generate the FM-reference
 
         //reading the multiFasta file into vectors 
-        if(args.fastq)
-            runningError=readFastQFile(&names,&bases,&fasta,&index);
+        if(parameters.fastq)
+            runningError=readFastQFile(&names,&bases,&fasta,&index,&title,&qual);
         else
-            runningError=readFasta(&names,&bases,&fasta,&index);
+            runningError=readFasta(&names,&bases,&fasta,&index,&title);
         
         //aligment
         int numberOFreads=bases.size();
@@ -67,7 +69,7 @@ int main(int argc,char *argv[])
         runningError=alignemnt(&names, &parameters, &bases, &fasta, &index, queryList, MatrixList);
         
         //binning
-        binningPrint(&names, &parameters, &title, queryList, MatrixList, numberOFreads, &bases);
+        binningPrint(&names, &parameters, &title, queryList, MatrixList, numberOFreads, &bases, &qual);
 
     }
     else
