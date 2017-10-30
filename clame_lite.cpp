@@ -49,7 +49,7 @@ bool readArguments(int argc,char *argv[], Args *args,Names *names, Parameters *p
             found1 = true;
             continue;
         }
-        if ( IsParam(argv[argum],"-fm9") ) //FM) reference
+        if ( IsParam(argv[argum],"-fm9") ) //FM reference
         {
             argum ++;
             if (argum < argc)  
@@ -174,9 +174,7 @@ bool readArguments(int argc,char *argv[], Args *args,Names *names, Parameters *p
 
 bool readFasta(Names *names, vector<string> *bases,string *fasta,vector<uint32_t> *index, vector<string> *title)
 {
-    
     //to print index
-    //mandatory file
     ofstream myfile;
     string nameFile=names->outputFile+".index";
     myfile.open(nameFile.c_str());
@@ -269,12 +267,16 @@ bool readFastQFile(Names *names,  vector<string>* bases, string* fasta, vector<u
             {
                 case s0:
                     if (word[0]=='@') 
-                        int found = name.find(' '), name=word.substr (0,found),
-                        countLine=0, state=s1, myfile<<name<<"\t"<<indexTitle++<<endl; //print Read0 0...;
+                    {    
+                        int found=word.find(' '); 
+                        name=word.substr(0,found);
+                        countLine=0; state=s1; myfile<<name<<"\t"<<indexTitle++<<endl; //print Read0 0...;
+                        title->push_back (name);
+                    }
                     break;
                 case s1:
                     if (word[0]=='+') 
-                        name=word, state=s2;
+                        state=s2;
                     else
                         read=read+word, countLine++;
                     break;
@@ -360,7 +362,7 @@ bool alignemnt(Names *names,Parameters *parameters,vector<string> *bases,string 
         #pragma omp parallel num_threads(cpus)
         {
             #pragma omp for schedule(runtime) 
-            for(int i=0; i<numberOFreads;i++)//process all parts except the last one because it can get a diffent size
+            for(int i=0; i<numberOFreads;i++)//
             {
                 uint32_t subjectID=0;
                 string query=*(ptrBases+i);
@@ -441,7 +443,9 @@ void binningPrint(Names *names, Parameters *parameters, vector<string> *title, i
 {
     int cpus=parameters->numThreads;
     std::vector<string>::iterator ptrBases= bases->begin();
-   
+    std::vector<string>::iterator ptrTitle= title->begin();
+    std::vector<string>::iterator ptrQual=  qual->begin();
+
     //1.Number of links by read
     #pragma omp parallel num_threads(cpus)
     {
@@ -453,6 +457,10 @@ void binningPrint(Names *names, Parameters *parameters, vector<string> *title, i
     
     
     //2. Genera los bins
+    string ext=".fasta";
+    if(parameters->fastq)
+        ext=".fastq";
+        
     ofstream myfile;
     string nameFile=names->outputFile+".binning";
     myfile.open(nameFile.c_str());
@@ -493,7 +501,7 @@ void binningPrint(Names *names, Parameters *parameters, vector<string> *title, i
                 stringstream ss;
                 ss << numBin;
                 string strNumBin = ss.str();
-                string nameFile2=names->outputFile+"_"+strNumBin+".fasta";
+                string nameFile2=names->outputFile+"_"+strNumBin+ext;
                 myfile2.open(nameFile2.c_str());
 
                 myfile<<">Bin:"<<numBin<<":\t"<<size<<endl;
@@ -503,10 +511,11 @@ void binningPrint(Names *names, Parameters *parameters, vector<string> *title, i
                     myfile<<*get<<"\t"<<numBin<<endl;
                     
                     string base=*(ptrBases+*(get));
-                    myfile2<<title[*(get)]<<endl;
+                    string name=*(ptrTitle+*(get));
+                    myfile2<<name<<endl;
                     myfile2<<base<<endl;
-                    if(parameters.fastq)
-                        myfile2<<'+'<<endl, myfile2<<qual[*(get)]<<endl;
+                    if(parameters->fastq)
+                    {string quality=*(ptrQual+*(get)); myfile2<<'+'<<endl, myfile2<<quality<<endl;}
 
                 }
                 numBin++;
@@ -580,7 +589,9 @@ bool IsParam(char arg[],const char comp[])
 void printerror(const char arg[])
 {
     cout << "CLAME:'Clasificador Metagenomico'" << endl;
-    cout << "Bin name and reads into of this bin"<<endl;
+    cout << "version 2.1 October 2017"<<endl;
+    cout << "Authors"<<endl;
+    cout << "Benavides A, Alzate JF and Cabarcas F"<<endl;
     cout << endl;
     cout << arg << endl;
     cout << "  -h\t\t\t(Help)" << endl;
@@ -597,5 +608,8 @@ void printerror(const char arg[])
     cout << ""<< endl;
 
 }
+
+
+
 
 
