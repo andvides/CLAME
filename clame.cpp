@@ -36,9 +36,9 @@ int main(int argc,char *argv[])
         cout<<"CLAME version_2.1 25/09/2017"<<endl;
         cout<<"Debug enable"<<endl;
     #endif
-    //struct Args {bool multiFasta; bool fastq, bool outputFile; bool numT; bool bases_Threshold; bool print; bool fm9; bool lu; bool ld; bool sizeBin;};
     Args   args = {false,false,false,false,false,false,false,false,false,false};
     Names  names;
+    //struct Parameters {int ld; int lu; int numThreads; int query_size; bool enablePrint; bool loadFM9;int sizeBin; bool fastq;};
     Parameters parameters={0,10000,1,20,false,false,1000,false};
     names.outputFile="output";
     
