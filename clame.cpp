@@ -39,14 +39,14 @@ int main(int argc,char *argv[])
     //struct Args {bool multiFasta; bool fastq, bool outputFile; bool numT; bool bases_Threshold; bool print; bool fm9; bool lu; bool ld; bool sizeBin;};
     Args   args = {false,false,false,false,false,false,false,false,false,false};
     Names  names;
-    //struct Parameters {int ld; int lu; int numThreads; int query_size; bool enablePrint; bool loadFM9;int sizeBin; bool fastq;};
     Parameters parameters={0,10000,1,20,false,false,1000,false};
     names.outputFile="output";
-    parameters.fastq=args.fastq;
+    
 
     bool initOK=readArguments(argc,argv,&args,&names,&parameters);
     if (initOK)
     {
+        parameters.fastq=args.fastq;
         parameters.loadFM9=args.fm9;
         bool runningError=false;
         
@@ -76,7 +76,8 @@ int main(int argc,char *argv[])
         printerror(argv[0]);
 
     return 1;
-} //fin del main
+} //end main
+
 
 
 
