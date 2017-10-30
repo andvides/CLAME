@@ -1,5 +1,5 @@
 ---------------------------------------------------------------
-    CLAME:"Clasificador Metagenomico"
+CLAME:"Clasificador Metagenomico"
 ---------------------------------------------------------------
 Description:
     CLAME is a binning software for metagenomic reads.
@@ -10,7 +10,7 @@ Description:
 ---------------------------------------------------------------
 Installation
 ---------------------------------------------------------------
-1. To download and install the SDSL - Succinct Data Structure Library, use the instructions describe in the wep page.
+1. To download and install the SDSL - Succinct Data Structure Library, follow the instructions on the web page.
 https://github.com/simongog/sdsl-lite
 
 2. To download CLAME source codes
