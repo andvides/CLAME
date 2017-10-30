@@ -34,12 +34,12 @@ Usage
 ./clame -b 70 -multiFasta test/Bancomini.fna -nt 4 -output bminiBins -print
 
 Output files
-1. bminiBins_*.fasta    Output fasta file for all the bins reported
-2. bminiBins.bins       All bins reported 
-3. bmini.fm9            FM-index output
-4. bmini.index          First colum contains the origal name for each read, the second column the index used by CLAME
-5. bminiBins.links      Histogram links by number of reads
-6. bminiBins.result     Adjacency list for the overlap detected by each read
+1. bminiBins_*.fasta:    Output fasta file for all the bins reported
+2. bminiBins.bins:       All bins reported 
+3. bmini.fm9:            FM-index output
+4. bmini.index:          First colum contains the origal name for each read, the second column the index used by CLAME
+5. bminiBins.links:      Histogram links by number of reads
+6. bminiBins.result:     Adjacency list for the overlap detected by each read
      
 ---------------------------------------------------------------
 Authors
