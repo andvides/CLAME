@@ -49,7 +49,7 @@ bool readArguments(int argc,char *argv[], Args *args,Names *names, Parameters *p
             found1 = true;
             continue;
         }
-        if ( IsParam(argv[argum],"-fm9") ) //FM reference
+        if ( IsParam(argv[argum],"-fm9") ) //FM) reference
         {
             argum ++;
             if (argum < argc)  
@@ -362,7 +362,7 @@ bool alignemnt(Names *names,Parameters *parameters,vector<string> *bases,string 
         #pragma omp parallel num_threads(cpus)
         {
             #pragma omp for schedule(runtime) 
-            for(int i=0; i<numberOFreads;i++)//
+            for(int i=0; i<numberOFreads;i++)//process all parts except the last one because it can get a diffent size
             {
                 uint32_t subjectID=0;
                 string query=*(ptrBases+i);
@@ -464,7 +464,8 @@ void binningPrint(Names *names, Parameters *parameters, vector<string> *title, i
     ofstream myfile;
     string nameFile=names->outputFile+".binning";
     myfile.open(nameFile.c_str());
-    
+    myfile<<"Bin\tsize\tmean\tstdv\tmean1/3\tcv1"<<endl;
+
                 
     int *stack = new int[numberOFreads] ();
     int *put=stack;
@@ -504,11 +505,11 @@ void binningPrint(Names *names, Parameters *parameters, vector<string> *title, i
                 string nameFile2=names->outputFile+"_"+strNumBin+ext;
                 myfile2.open(nameFile2.c_str());
 
-                myfile<<">Bin:"<<numBin<<":\t"<<size<<endl;
+                //myfile<<">Bin:"<<numBin<<":\t"<<size<<endl;
                 while(get!=stack)
                 {
                     --get;
-                    myfile<<*get<<"\t"<<numBin<<endl;
+                    //myfile<<*get<<"\t"<<numBin<<endl;
                     
                     string base=*(ptrBases+*(get));
                     string name=*(ptrTitle+*(get));
@@ -516,8 +517,22 @@ void binningPrint(Names *names, Parameters *parameters, vector<string> *title, i
                     myfile2<<base<<endl;
                     if(parameters->fastq)
                     {string quality=*(ptrQual+*(get)); myfile2<<'+'<<endl, myfile2<<quality<<endl;}
+                    
+                    //statidistic
+                    int total=MatrixList[*get].size();
+                    localLinks[p++]=total;
+                    links1+=total;
 
                 }
+                
+                //statidistic
+                mean1=links1/size;
+                for( int p=0;p<size;p++)
+                    std1+=pow(localLinks[p] - mean1, 2);
+                float stdv1=sqrt(std1 / size);
+                float cv1=100*stdv1/mean1;
+                myfile<<">Bin:"<<numBin<<":\t"<<size<<"\t"<<mean1<<"\t"<<stdv1<<"\t"<<mean1/3<<"\t"<<cv1<<endl;
+                
                 numBin++;
                 myfile2.close();
 
@@ -589,9 +604,7 @@ bool IsParam(char arg[],const char comp[])
 void printerror(const char arg[])
 {
     cout << "CLAME:'Clasificador Metagenomico'" << endl;
-    cout << "version 2.1 October 2017"<<endl;
-    cout << "Authors"<<endl;
-    cout << "Benavides A, Alzate JF and Cabarcas F"<<endl;
+    cout << "Bin name and reads into of this bin"<<endl;
     cout << endl;
     cout << arg << endl;
     cout << "  -h\t\t\t(Help)" << endl;
@@ -608,6 +621,7 @@ void printerror(const char arg[])
     cout << ""<< endl;
 
 }
+
 
 
 
