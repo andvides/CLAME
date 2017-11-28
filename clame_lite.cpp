@@ -604,7 +604,9 @@ bool IsParam(char arg[],const char comp[])
 void printerror(const char arg[])
 {
     cout << "CLAME:'Clasificador Metagenomico'" << endl;
-    cout << "Bin name and reads into of this bin"<<endl;
+    cout << "version 2.1 October 2017"<<endl;
+    cout << "Authors"<<endl;
+    cout << "Benavides A, Alzate JF and Cabarcas F"<<endl;
     cout << endl;
     cout << arg << endl;
     cout << "  -h\t\t\t(Help)" << endl;
