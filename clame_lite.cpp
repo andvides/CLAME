@@ -21,14 +21,17 @@
  *  
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see http://www.gnu.org/licenses/ .
- *   
+ *  Version 2.2
+ *  Binning method was modified to include edges parameter with non inclusion strategy  
  *  
  ---------------------------------------------------------------*/
 
 #include "clame_lite.h"
 
+
 bool readArguments(int argc,char *argv[], Args *args,Names *names, Parameters *parameters)
 {
+    
     bool   error = false, found1=false, mandatory=false;
     int    argum = 1;
     while (argum < argc && not error) 
@@ -63,31 +66,17 @@ bool readArguments(int argc,char *argv[], Args *args,Names *names, Parameters *p
             found1 = true;
             continue;
         }
-        if ( IsParam(argv[argum],"-lu") ) //superior cut
+        if ( IsParam(argv[argum],"-e") ) //edges constrains
         {
             argum ++;
             if (argum < argc)  
             {
-                args->lu = true;
-            parameters->lu = atoi(argv[argum]);
+                args->edges = true;
+                parameters->edges = argv[argum];
             } 
             else 
                 error = true;
          
-            argum ++;
-            found1 = true;
-            continue;
-        }
-        if ( IsParam(argv[argum],"-ld") ) //inferior cut
-        {
-            argum ++;
-            if (argum < argc)  
-            {
-                args->ld = true;
-                parameters->ld = atoi(argv[argum]);
-            } 
-            else 
-                error = true;
             argum ++;
             found1 = true;
             continue;
@@ -313,7 +302,7 @@ bool readFastQFile(Names *names,  vector<string>* bases, string* fasta, vector<u
 
 bool alignemnt(Names *names,Parameters *parameters,vector<string> *bases,string *fasta, vector<uint32_t> *index, int* queryList, vector<int>* MatrixList)
 {
-       
+    
     std::vector<string>::iterator ptrBases= bases->begin();
    
     //FM-Index
@@ -411,7 +400,7 @@ bool alignemnt(Names *names,Parameters *parameters,vector<string> *bases,string 
         //print the result
         if(parameters->enablePrint)
             printResult(names,numberOFreads,MatrixList);
-            
+
         return runningError;
     }
 }
@@ -439,19 +428,51 @@ void printResult(Names *names, int numberOFreads, vector<int> *MatrixList)
     myfile2.close();
 }
 
+
 void binningPrint(Names *names, Parameters *parameters, vector<string> *title, int *queryList, vector<int> *MatrixList, int numberOFreads, vector<string> *bases,vector<string> *qual)
 {
+    cout<<"edges: "<<parameters->edges<<endl;
+    std::vector<int> edges_vect;
+    std::stringstream ss(parameters->edges);
+    int i;
+
+    while (ss >> i)
+    {
+        edges_vect.push_back(i);
+
+        if (ss.peek() == ',')
+            ss.ignore();
+    }
+    std::sort (edges_vect.begin(), edges_vect.end()); 
+    
+    
     int cpus=parameters->numThreads;
     std::vector<string>::iterator ptrBases= bases->begin();
     std::vector<string>::iterator ptrTitle= title->begin();
     std::vector<string>::iterator ptrQual=  qual->begin();
+    
 
+    
+  ofstream myfile;
+  string nameFile=names->outputFile+".binning";
+  myfile.open(nameFile.c_str());
+  myfile<<"Bin\tld\tlu\tsize\tmean\tstdv\tmean1/3\tcv1"<<endl;
+
+  int numBin=0; //0: no visietd 1:visited    
+  for (i=0; i< edges_vect.size()-1; i++)
+  {   
+    int ld=edges_vect.at(i);
+    int lu=edges_vect.at(i+1);
+    //std::cout << "ld="<<ld<<" lu="<<lu<<std::endl;
+        
     //1.Number of links by read
     #pragma omp parallel num_threads(cpus)
     {
         #pragma omp for schedule(runtime)
         for(int k=0; k<numberOFreads;k++) 
-            if(MatrixList[k].size()<parameters->ld || MatrixList[k].size()>parameters->lu )
+            if(MatrixList[k].size()>=ld && MatrixList[k].size()<lu )
+                queryList[k]=0; //marked as non visited 
+            else    
                 queryList[k]=1; //marked as visited 
     }
     
@@ -461,16 +482,12 @@ void binningPrint(Names *names, Parameters *parameters, vector<string> *title, i
     if(parameters->fastq)
         ext=".fastq";
         
-    ofstream myfile;
-    string nameFile=names->outputFile+".binning";
-    myfile.open(nameFile.c_str());
-    myfile<<"Bin\tsize\tmean\tstdv\tmean1/3\tcv1"<<endl;
-
+    
                 
     int *stack = new int[numberOFreads] ();
     int *put=stack;
     int *get=stack;
-    int numBin=0; //0: no visietd 1:visited
+
     for(int i=0; i<numberOFreads;i++)
     {
         if(queryList[i]==0) //not visited
@@ -492,7 +509,7 @@ void binningPrint(Names *names, Parameters *parameters, vector<string> *title, i
 
             //PRINT BIN
             int size=get-stack;
-            if(size>parameters->sizeBin)
+            if(size>=parameters->sizeBin)
             {
                 float links1=0.0, mean1=0.0, std1=0.0;
                 double *localLinks = new double[size]; 
@@ -531,7 +548,7 @@ void binningPrint(Names *names, Parameters *parameters, vector<string> *title, i
                     std1+=pow(localLinks[p] - mean1, 2);
                 float stdv1=sqrt(std1 / size);
                 float cv1=100*stdv1/mean1;
-                myfile<<">Bin:"<<numBin<<":\t"<<size<<"\t"<<mean1<<"\t"<<stdv1<<"\t"<<mean1/3<<"\t"<<cv1<<endl;
+                myfile<<">Bin:"<<numBin<<"\t"<<ld<<"\t"<<lu<<"\t"<<size<<"\t"<<mean1<<"\t"<<stdv1<<"\t"<<mean1/3<<"\t"<<cv1<<endl;
                 
                 numBin++;
                 myfile2.close();
@@ -540,9 +557,10 @@ void binningPrint(Names *names, Parameters *parameters, vector<string> *title, i
             put=stack; //pointers restart
             get=stack; 
 
-		}
-	}
-    myfile.close();
+        }
+    }
+  }	
+  myfile.close();
 }
 
 uint32_t indx2Loc(uint32_t locs, vector<uint32_t> *index)
@@ -604,7 +622,7 @@ bool IsParam(char arg[],const char comp[])
 void printerror(const char arg[])
 {
     cout << "CLAME:'Clasificador Metagenomico'" << endl;
-    cout << "version 2.1 October 2017"<<endl;
+    cout << "version 2.2 December 2017"<<endl;
     cout << "Authors"<<endl;
     cout << "Benavides A, Alzate JF and Cabarcas F"<<endl;
     cout << endl;
@@ -613,8 +631,7 @@ void printerror(const char arg[])
     cout << "  -b minimum number of bases to take an alignment (default 20) " << endl;
     cout << "  -fm9 Load fm9 file  " << endl;
     cout << "  -fastq input file is in a fastq format  " << endl;
-    cout << "  -ld minimun number of links (default 0) " << endl;
-    cout << "  -lu maximun number of links (default 10000) " << endl;
+    cout << "  -e array of cut points (comma separator) for edges constrains (default 0,10000) " << endl;
     cout << "  -multiFasta\t\tFILE  with all the reads " << endl;
     cout << "  -nt number of threads to use (default 1) " << endl;
     cout << "  -output name for the output-file  if print option was selected (default output)" << endl;
@@ -623,9 +640,3 @@ void printerror(const char arg[])
     cout << ""<< endl;
 
 }
-
-
-
-
-
-
