@@ -431,7 +431,7 @@ void printResult(Names *names, int numberOFreads, vector<int> *MatrixList)
 
 void binningPrint(Names *names, Parameters *parameters, vector<string> *title, int *queryList, vector<int> *MatrixList, int numberOFreads, vector<string> *bases,vector<string> *qual)
 {
-    cout<<"edges: "<<parameters->edges<<endl;
+    
     std::vector<int> edges_vect;
     std::stringstream ss(parameters->edges);
     int i;
