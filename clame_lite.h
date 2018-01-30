@@ -21,7 +21,8 @@
  *  
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see http://www.gnu.org/licenses/ .
- *   
+ *  Version 2.2
+ *  Binning method was modified to include edges parameter with non inclusion strategy 
  *  
  ---------------------------------------------------------------*/
 
@@ -43,6 +44,7 @@
 #include <tr1/unordered_map>
 #include <vector>
 
+
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 //using std::unordered_map;
@@ -51,9 +53,9 @@ using std::tr1::unordered_map;
 using namespace sdsl;
 using namespace std;
 
-struct Args {bool multiFasta; bool fastq; bool outputFile; bool numT; bool bases_Threshold; bool print; bool fm9; bool lu; bool ld; bool sizeBin;};
+struct Args {bool multiFasta; bool fastq; bool outputFile; bool numT; bool bases_Threshold; bool print; bool fm9; bool edges; bool sizeBin;};
 struct Names {string multiFasta; string outputFile; string fm9;};
-struct Parameters {int ld; int lu; int numThreads; int query_size; bool enablePrint; bool loadFM9;int sizeBin;bool fastq;};
+struct Parameters {string edges; int numThreads; int query_size; bool enablePrint; bool loadFM9;int sizeBin;bool fastq;};
 
 string reverse(string str);
 int mstrlen(const char arg[]);
