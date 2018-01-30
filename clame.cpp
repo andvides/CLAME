@@ -22,7 +22,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see http://www.gnu.org/licenses/ .
  *   
- *  
+ *  Version 2.2
+ *  Binning method was modified to include edges parameter with non inclusion strategy
  ---------------------------------------------------------------*/
 
 #include "clame_lite.h"
@@ -31,21 +32,23 @@
 
 int main(int argc,char *argv[])
 {
-
+ 
     #ifdef debug
-        cout<<"CLAME version_2.1 25/09/2017"<<endl;
+        cout<<"CLAME version_2.2 25/09/2017"<<endl;
         cout<<"Debug enable"<<endl;
     #endif
-    Args   args = {false,false,false,false,false,false,false,false,false,false};
+    //Args {bool multiFasta; bool fastq; bool outputFile; bool numT; bool bases_Threshold; bool print; bool fm9; bool edges; bool sizeBin;};    
+    Args   args = {false,false,false,false,false,false,false,false,false};
     Names  names;
-    //struct Parameters {int ld; int lu; int numThreads; int query_size; bool enablePrint; bool loadFM9;int sizeBin; bool fastq;};
-    Parameters parameters={0,10000,1,20,false,false,1000,false};
+    //struct Parameters {string edges; int numThreads; int query_size; bool enablePrint; bool loadFM9;int sizeBin; bool fastq;};
+    Parameters parameters={"0,10000",1,20,false,false,1000,false};
     names.outputFile="output";
     
 
     bool initOK=readArguments(argc,argv,&args,&names,&parameters);
     if (initOK)
     {
+
         parameters.fastq=args.fastq;
         parameters.loadFM9=args.fm9;
         bool runningError=false;
@@ -70,14 +73,10 @@ int main(int argc,char *argv[])
         
         //binning
         binningPrint(&names, &parameters, &title, queryList, MatrixList, numberOFreads, &bases, &qual);
-
+        
     }
     else
         printerror(argv[0]);
 
     return 1;
 } //end main
-
-
-
-
