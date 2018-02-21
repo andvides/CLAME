@@ -628,7 +628,7 @@ void printerror(const char arg[])
     cout << endl;
     cout << arg << endl;
     cout << "  -h\t\t\t(Help)" << endl;
-    cout << "  -b minimum number of bases to take an alignment (default 20) " << endl;
+    cout << "  -b minimum number of bases to take an alignment (default 70) " << endl;
     cout << "  -fm9 Load fm9 file  " << endl;
     cout << "  -fastq input file is in a fastq format  " << endl;
     cout << "  -e array of cut points (comma separator) for edges constrains (default 0,10000) " << endl;
