@@ -41,7 +41,7 @@ int main(int argc,char *argv[])
     Args   args = {false,false,false,false,false,false,false,false,false};
     Names  names;
     //struct Parameters {string edges; int numThreads; int query_size; bool enablePrint; bool loadFM9;int sizeBin; bool fastq;};
-    Parameters parameters={"0,10000",1,20,false,false,1000,false};
+    Parameters parameters={"0,10000",1,70,false,false,1000,false};
     names.outputFile="output";
     
 
