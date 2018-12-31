@@ -44,7 +44,12 @@ Output files
 ---------------------------------------------------------------
 Authors
 ---------------------------------------------------------------
-Benavides A(1), Alzate JF (2),(3) and Cabarcas F (1),(3)
+Benavides A(1), Alzate JF (2),(3) and Cabarcas F (1),(2)
 1.	Grupo Sistemic, Departamento de Ingeniería Electrónica, Facultad de Ingenieria, Universidad de Antioquia.
 2.	Centro Nacional de Secuenciacion Genomica-CNSG, Sede de Investigación Universitaria SIU, Universidad de Antioquia
 3.	Grupo de Parasitología, Departamento de Microbiología y Parasitología, Facultad de Medicina, Universidad de Antioquia
+
+---------------------------------------------------------------
+Publication
+---------------------------------------------------------------
+Benavides A, Isaza JP, Niño-garcía JP, Alzate JF, Cabarcas F. CLAME : a new alignment based binning algorithm allows the genomic description of a novel Xanthomonadaceae from the Colombian Andes. BMC Genomics; 2018;1–22; doi:10.1186/s12864-018-5191-y
