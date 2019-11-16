@@ -19,7 +19,7 @@
 #include <algorithm>
 #include <omp.h>
 #include <vector>
-
+#include <math.h>
 #define bufferSize 10000
 
 //using std::unordered_map;
