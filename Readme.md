@@ -58,4 +58,4 @@ doi:10.1186/s12864-018-5191-y
 ---------------------------------------------------------------
 License
 --------------------------------------------------------------
-This project is licensed under the GPLv3 License - see the [LICENSE](https://github.com/voutcn/megahit/blob/master/LICENSE) file for details
+This project is licensed under the GPLv3 License - see the [LICENSE](LICENSE) file for details
