@@ -53,3 +53,8 @@ Benavides A(1), Alzate JF (2),(3) and Cabarcas F (1),(2)
 Publication
 ---------------------------------------------------------------
 Benavides A, Isaza JP, Niño-garcía JP, Alzate JF, Cabarcas F. CLAME : a new alignment based binning algorithm allows the genomic description of a novel Xanthomonadaceae from the Colombian Andes. BMC Genomics; 2018;1–22; doi:10.1186/s12864-018-5191-y
+
+---------------------------------------------------------------
+#License
+--------------------------------------------------------------
+This project is licensed under the GPLv3 License - see the [LICENSE](https://github.com/voutcn/megahit/blob/master/LICENSE) file for details
