@@ -7,10 +7,10 @@ LLIB=~/lib
 OBJ = genFm9
 SOURCES= genFm9.cpp genFm9_lite.cpp
 all:
-	$(CPP) $(CFLAGS) -I $(ILIB) -L $(LLIB) $(SOURCES) -o $(OBJ)  $(LFLAGS)
+	$(CPP) $(CFLAGS) -I $(CPPFLAGS) -L $(LLIB2) $(SOURCES) -o $(OBJ)  $(LFLAGS)
 
 debug:
-	$(CPP) $(CFLAGSD) -I $(ILIB) -L $(LLIB) $(SOURCES) -o $(OBJ) $(LFLAGS) 
+	$(CPP) $(CFLAGSD) -I $(CPPFLAGS) -L $(LLIB2) $(SOURCES) -o $(OBJ) $(LFLAGS) 
 
 clean:
 	rm $(OBJ)
