@@ -1,6 +1,6 @@
-CPP=g++
-CFLAGS=-O3 -std=c++11 -fopenmp 
-LFLAGS=-lsdsl -ldivsufsort -ldivsufsort64
+CPP= g++
+CFLAGS= -O3 -std=c++11 -fopenmp 
+LFLAGS= -lsdsl -ldivsufsort -ldivsufsort64
 CFLAGSD=$(CFLAGS) -D debug  -DNDEBUG
 ILIB=
 LLIB=
