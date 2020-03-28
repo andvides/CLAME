@@ -1,16 +1,15 @@
 CPP=g++
-CFLAGS=-O3 -std=c++11 -fopenmp 
+FLAGS=-O3 -std=c++11 -fopenmp 
 LFLAGS=-lsdsl -ldivsufsort -ldivsufsort64
-CFLAGSD=$(CFLAGS) -D debug  -DNDEBUG
-ILIB=~/include
-LLIB=~/lib
+FLAGSD=$(FLAGS) -D debug  -DNDEBUG
+ILIB=-I ~/include -L ~/lib
 OBJ = clame 
 SOURCES= clame.cpp clame_lite.cpp
 all:
-	$(CPP) $(CFLAGS) -I $(CPPFLAGS) -L $(LLIB) $(SOURCES) -o $(OBJ)  $(LFLAGS)
+	$(CPP) $(FLAGS) $(ILIB) $(SOURCES) -o $(OBJ)  $(LFLAGS)
 
 debug:
-	$(CPP) $(CFLAGSD) -I $(CPPFLAGS=) -L $(LLIB) $(SOURCES) -o $(OBJ) $(LFLAGS) 
+	$(CPP) $(FLAGSD) $(ILIB) $(SOURCES) -o $(OBJ) $(LFLAGS) 
 
 clean:
 	rm $(OBJ)
