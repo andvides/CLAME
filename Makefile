@@ -7,10 +7,10 @@ LLIB=~/lib
 OBJ = clame 
 SOURCES= clame.cpp clame_lite.cpp
 all:
-	$(CPP) $(CFLAGS) -I $(ILIB) -L $(LLIB) $(SOURCES) -o $(OBJ)  $(LFLAGS)
+	$(CPP) $(CFLAGS) -I $(CPPFLAGS) -L $(LLIB) $(SOURCES) -o $(OBJ)  $(LFLAGS)
 
 debug:
-	$(CPP) $(CFLAGSD) -I $(ILIB) -L $(LLIB) $(SOURCES) -o $(OBJ) $(LFLAGS) 
+	$(CPP) $(CFLAGSD) -I $(CPPFLAGS=) -L $(LLIB) $(SOURCES) -o $(OBJ) $(LFLAGS) 
 
 clean:
 	rm $(OBJ)
